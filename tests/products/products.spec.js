@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../pages/LoginPage');
 const { ProductsPage } = require('../../pages/ProductsPage');
+const { HeaderComponent } = require('../../components/HeaderComponent');
 
 test('products page opens', async ({ page }) => {
     // Arrange
@@ -25,6 +26,7 @@ test('user can add product to cart', async ({ page }) => {
     // Arrange
     const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
+    const headerComponent = new HeaderComponent(page);
 
     // Act
     // Login with a valid SauceDemo user.
@@ -38,26 +40,27 @@ test('user can add product to cart', async ({ page }) => {
     // After adding the product, the button changes to "Remove".
     await expect(productsPage.removeButtons.first()).toBeVisible();
     // The cart badge should show "1" because one product was added.
-    await expect(productsPage.cartBadge).toHaveText('1');
+    await expect(headerComponent.cartBadge).toHaveText('1');
 });
 
 test('user can remove product from products page', async ({ page }) => {
     // Arrange
     const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
+    const headerComponent = new HeaderComponent(page);
 
     await loginPage.open();
     await loginPage.login('standard_user', 'secret_sauce');
 
     await productsPage.addFirstProductToCart();
-    await expect(productsPage.cartBadge).toHaveText('1');
+    await expect(headerComponent.cartBadge).toHaveText('1');
 
     // Act
     await productsPage.removeFirstProduct();
 
     // Assert
     // After removing the product, icon count should be 0 and the cart badge should not be visible.
-    await expect(productsPage.cartBadge).not.toBeVisible();
+    await expect(headerComponent.cartBadge).not.toBeVisible();
 });
 
 test('products can be sorted by price low to high', async ({ page }) => {

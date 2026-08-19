@@ -5,9 +5,6 @@ class ProductsPage {
         // Page title.
         this.productsTitle = page.getByText('Products');
 
-        // Cart badge.
-        this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
-
         // Product action buttons.
         this.addToCartButtons = page.getByRole('button', {
             name: 'Add to cart',
