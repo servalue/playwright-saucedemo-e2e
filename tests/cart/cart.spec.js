@@ -1,18 +1,16 @@
 const { test, expect } = require('@playwright/test');
-const { LoginPage } = require('../../pages/LoginPage');
 const { ProductsPage } = require('../../pages/ProductsPage');
 const { CartPage } = require('../../pages/CartPage');
 const { HeaderComponent } = require('../../components/HeaderComponent');
 
 test('product appears in cart', async ({ page }) => {
     // Arrange
-    const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
     const cartPage = new CartPage(page);
     const headerComponent = new HeaderComponent(page);
 
-    await loginPage.open();
-    await loginPage.login('standard_user', 'secret_sauce');
+    // Authentication state is already loaded.
+    await page.goto('/inventory.html');
 
     await productsPage.addFirstProductToCart();
 
@@ -28,13 +26,12 @@ test('product appears in cart', async ({ page }) => {
 
 test('user can remove product from cart', async ({ page }) => {
     // Arrange
-    const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
     const cartPage = new CartPage(page);
     const headerComponent = new HeaderComponent(page);
 
-    await loginPage.open();
-    await loginPage.login('standard_user', 'secret_sauce');
+    // Authentication state is already loaded.
+    await page.goto('/inventory.html');
 
     await productsPage.addFirstProductToCart();
     await headerComponent.openCart();

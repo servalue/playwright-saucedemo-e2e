@@ -1,18 +1,14 @@
 const { test, expect } = require('@playwright/test');
-const { LoginPage } = require('../../pages/LoginPage');
 const { ProductsPage } = require('../../pages/ProductsPage');
 const { HeaderComponent } = require('../../components/HeaderComponent');
 
 test('products page opens', async ({ page }) => {
     // Arrange
-    const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
 
-    await loginPage.open();
-
     // Act
-    // Login with a valid SauceDemo user.
-    await loginPage.login('standard_user', 'secret_sauce');
+    // Authentication state is already loaded by Playwright.
+    await page.goto('/inventory.html');
 
     // Assert
     // Check that the Products title is visible.
@@ -24,14 +20,12 @@ test('products page opens', async ({ page }) => {
 
 test('user can add product to cart', async ({ page }) => {
     // Arrange
-    const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
     const headerComponent = new HeaderComponent(page);
 
     // Act
-    // Login with a valid SauceDemo user.
-    await loginPage.open();
-    await loginPage.login('standard_user', 'secret_sauce');
+    // Authentication state is already loaded by Playwright.
+    await page.goto('/inventory.html');
 
     // Add the first product to the cart.
     await productsPage.addFirstProductToCart();
@@ -45,12 +39,11 @@ test('user can add product to cart', async ({ page }) => {
 
 test('user can remove product from products page', async ({ page }) => {
     // Arrange
-    const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
     const headerComponent = new HeaderComponent(page);
 
-    await loginPage.open();
-    await loginPage.login('standard_user', 'secret_sauce');
+    // Authentication state is already loaded by Playwright.
+    await page.goto('/inventory.html');
 
     await productsPage.addFirstProductToCart();
     await expect(headerComponent.cartBadge).toHaveText('1');
@@ -65,11 +58,10 @@ test('user can remove product from products page', async ({ page }) => {
 
 test('products can be sorted by price low to high', async ({ page }) => {
     // Arrange
-    const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
 
-    await loginPage.open();
-    await loginPage.login('standard_user', 'secret_sauce');
+    // Authentication state is already loaded by Playwright.
+    await page.goto('/inventory.html');
 
     // Act
     // click the sort dropdown and select "Price (low to high)".

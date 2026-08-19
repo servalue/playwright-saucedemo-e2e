@@ -47,9 +47,31 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project to authenticate a standard user before running tests.
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.js/,
+    },
+
+    // Setup project to run authentication tests without any preloaded storage state.
+    {
+      name: 'auth-chromium',
+      testMatch: /auth\/.*\.spec\.js/,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: undefined,
+      },
+    },
+
+    // Test against desktop browsers.
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      testIgnore: /auth\/.*\.spec\.js/,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
 
     {
