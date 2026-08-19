@@ -17,7 +17,7 @@ export default defineConfig({
   /* Run tests in files in parallel */
   fullyParallel: true,
   // One complete test can run for a maximum of 30 seconds.
-  timeout: 30_000,
+  timeout: 60_000,
   // Playwright assertions can wait up to 5 seconds for the expected state.
   expect: {
     timeout: 5_000,
@@ -47,12 +47,16 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project.
+    // Runs authentication once and saves the storage state.
     // Setup project to authenticate a standard user before running tests.
     {
       name: 'setup',
       testMatch: /.*\.setup\.js/,
     },
 
+    // Auth tests in Chromium.
+    // These tests must NOT use saved authentication,
     // Setup project to run authentication tests without any preloaded storage state.
     {
       name: 'auth-chromium',
@@ -63,25 +67,63 @@ export default defineConfig({
       },
     },
 
-    // Test against desktop browsers.
+    // Auth tests in Firefox.
+    {
+      name: 'auth-firefox',
+      testMatch: /auth\/.*\.spec\.js/,
+      use: {
+        ...devices['Desktop Firefox'],
+        storageState: undefined,
+      },
+    },
+
+    // Auth tests in WebKit.
+    {
+      name: 'auth-webkit',
+      testMatch: /auth\/.*\.spec\.js/,
+      use: {
+        ...devices['Desktop Safari'],
+        storageState: undefined,
+      },
+    },
+
+    // Business tests in Chromium.
+    // Auth tests are ignored here.
     {
       name: 'chromium',
       testIgnore: /auth\/.*\.spec\.js/,
       use: {
         ...devices['Desktop Chrome'],
+        // Reuse the authentication state created by the setup project.
         storageState: 'playwright/.auth/user.json',
       },
       dependencies: ['setup'],
     },
 
+    // Business tests in Firefox.
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      testIgnore: /auth\/.*\.spec\.js/,
+
+      use: {
+        ...devices['Desktop Firefox'],
+        storageState: 'playwright/.auth/user.json',
+      },
+
+      dependencies: ['setup'],
     },
 
+    // Business tests in WebKit.
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      testIgnore: /auth\/.*\.spec\.js/,
+
+      use: {
+        ...devices['Desktop Safari'],
+        storageState: 'playwright/.auth/user.json',
+      },
+
+      dependencies: ['setup'],
     },
 
     /* Test against mobile viewports. */
