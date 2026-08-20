@@ -1,5 +1,10 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../pages/LoginPage');
+const {
+    standardUser,
+    lockedUser,
+    invalidUser,
+} = require('../../test-data/users');
 
 // "SauceDemo page opens" is the test name.
 test('SauceDemo page opens', async ({ page }) => {
@@ -40,7 +45,10 @@ test('standard user can login', async ({ page }) => {
 
     // Act
     // Enter valid credentials.
-    await loginPage.login('standard_user', 'secret_sauce')
+    await loginPage.login(
+        standardUser.username,
+        standardUser.password
+    );
 
     // Assert
     // After successful login, SauceDemo should open the inventory page.
@@ -53,8 +61,10 @@ test('invalid username cannot login', async ({ page }) => {
     await loginPage.open();
 
     // Act
-    await loginPage.login('wrong_user', 'secret_sauce');
-
+    await loginPage.login(
+        invalidUser.username,
+        standardUser.password
+    );
     // Assert
     await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
 });
@@ -65,8 +75,10 @@ test('invalid password cannot login', async ({ page }) => {
     await loginPage.open();
 
     // Act
-    await loginPage.login('standard_user', 'wrong_password');
-
+    await loginPage.login(
+        standardUser.username,
+        invalidUser.password
+    );
     // Assert
     await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
 });
@@ -77,8 +89,10 @@ test('locked user cannot login', async ({ page }) => {
     await loginPage.open();
 
     // Act
-    await loginPage.login('locked_out_user', 'secret_sauce');
-
+    await loginPage.login(
+        lockedUser.username,
+        lockedUser.password
+    );
     // Assert
     await expect(loginPage.errorMessage).toHaveText('Epic sadface: Sorry, this user has been locked out.');
 });
@@ -89,7 +103,10 @@ test('empty username cannot login', async ({ page }) => {
     await loginPage.open();
 
     // Act
-    await loginPage.login('', 'secret_sauce');
+    await loginPage.login(
+        '',
+        standardUser.password
+    );
 
     // Assert
     await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username is required');
@@ -101,7 +118,10 @@ test('empty password cannot login', async ({ page }) => {
     await loginPage.open();
 
     // Act
-    await loginPage.login('standard_user', '');
+    await loginPage.login(
+        standardUser.username,
+        ''
+    );
 
     // Assert
     await expect(loginPage.errorMessage).toHaveText('Epic sadface: Password is required');
