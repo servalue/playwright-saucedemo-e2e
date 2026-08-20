@@ -1,13 +1,12 @@
-const { test, expect } = require('@playwright/test');
-const { ProductsPage } = require('../../pages/ProductsPage');
-const { CartPage } = require('../../pages/CartPage');
-const { HeaderComponent } = require('../../components/HeaderComponent');
+const { test, expect } = require('../../fixtures/testFixtures');
 
-test('product appears in cart', async ({ page }) => {
+test('product appears in cart', async ({
+    page,
+    productsPage,
+    cartPage,
+    headerComponent
+}) => {
     // Arrange
-    const productsPage = new ProductsPage(page);
-    const cartPage = new CartPage(page);
-    const headerComponent = new HeaderComponent(page);
 
     // Authentication state is already loaded.
     await page.goto('/inventory.html');
@@ -24,11 +23,13 @@ test('product appears in cart', async ({ page }) => {
     await expect(cartPage.productNames.first()).toBeVisible();
 });
 
-test('user can remove product from cart', async ({ page }) => {
+test('user can remove product from cart', async ({
+    page,
+    productsPage,
+    cartPage,
+    headerComponent
+}) => {
     // Arrange
-    const productsPage = new ProductsPage(page);
-    const cartPage = new CartPage(page);
-    const headerComponent = new HeaderComponent(page);
 
     // Authentication state is already loaded.
     await page.goto('/inventory.html');

@@ -16,7 +16,7 @@ export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
-  // One complete test can run for a maximum of 30 seconds.
+  // One complete test can run for a maximum of 60 seconds.
   timeout: 60_000,
   // Playwright assertions can wait up to 5 seconds for the expected state.
   expect: {

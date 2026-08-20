@@ -1,10 +1,10 @@
-const { test, expect } = require('@playwright/test');
-const { ProductsPage } = require('../../pages/ProductsPage');
-const { HeaderComponent } = require('../../components/HeaderComponent');
+const { test, expect } = require('../../fixtures/testFixtures');
 
-test('products page opens', async ({ page }) => {
+test('products page opens', async ({
+    page,
+    productsPage
+}) => {
     // Arrange
-    const productsPage = new ProductsPage(page);
 
     // Act
     // Authentication state is already loaded by Playwright.
@@ -18,10 +18,12 @@ test('products page opens', async ({ page }) => {
     await expect(page).toHaveURL(/inventory.html/);
 });
 
-test('user can add product to cart', async ({ page }) => {
+test('user can add product to cart', async ({
+    page,
+    productsPage,
+    headerComponent,
+}) => {
     // Arrange
-    const productsPage = new ProductsPage(page);
-    const headerComponent = new HeaderComponent(page);
 
     // Act
     // Authentication state is already loaded by Playwright.
@@ -37,11 +39,12 @@ test('user can add product to cart', async ({ page }) => {
     await expect(headerComponent.cartBadge).toHaveText('1');
 });
 
-test('user can remove product from products page', async ({ page }) => {
+test('user can remove product from products page', async ({
+    page,
+    productsPage,
+    headerComponent,
+}) => {
     // Arrange
-    const productsPage = new ProductsPage(page);
-    const headerComponent = new HeaderComponent(page);
-
     // Authentication state is already loaded by Playwright.
     await page.goto('/inventory.html');
 
@@ -56,9 +59,11 @@ test('user can remove product from products page', async ({ page }) => {
     await expect(headerComponent.cartBadge).not.toBeVisible();
 });
 
-test('products can be sorted by price low to high', async ({ page }) => {
+test('products can be sorted by price low to high', async ({
+    page,
+    productsPage
+}) => {
     // Arrange
-    const productsPage = new ProductsPage(page);
 
     // Authentication state is already loaded by Playwright.
     await page.goto('/inventory.html');
