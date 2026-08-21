@@ -52,6 +52,7 @@ export default defineConfig({
     // Setup project to authenticate a standard user before running tests.
     {
       name: 'setup',
+      testDir: './auth', // добавить сюда
       testMatch: /.*\.setup\.js/,
     },
 
