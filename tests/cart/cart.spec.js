@@ -1,4 +1,6 @@
 const { test, expect } = require('../../fixtures/testFixtures');
+// Import reusable product test data.
+const { products } = require('../../test-data/products');
 
 test('product appears in cart', async ({
     page,
@@ -11,7 +13,7 @@ test('product appears in cart', async ({
     // Authentication state is already loaded.
     await page.goto('/inventory.html');
 
-    await productsPage.addFirstProductToCart();
+    await productsPage.addProductToCart(products.backpack);
 
     // Act
     await headerComponent.openCart();
@@ -20,7 +22,7 @@ test('product appears in cart', async ({
     // After adding the product, the cart should have one item
     await expect(cartPage.cartItems).toHaveCount(1);
     // The product name should be visible in the cart
-    await expect(cartPage.productNames.first()).toBeVisible();
+    await expect(cartPage.productNames).toContainText(products.backpack);
 });
 
 test('user can remove product from cart', async ({
@@ -34,8 +36,12 @@ test('user can remove product from cart', async ({
     // Authentication state is already loaded.
     await page.goto('/inventory.html');
 
-    await productsPage.addFirstProductToCart();
+    // Add a product to the cart and open the cart page.
+    await productsPage.addProductToCart(products.backpack);
     await headerComponent.openCart();
+
+    // Confirm the exact product is present.
+    await expect(cartPage.productNames).toContainText(products.backpack);
 
     // Act
     await cartPage.removeFirstProduct();

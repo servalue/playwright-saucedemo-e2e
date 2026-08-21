@@ -26,10 +26,51 @@ class ProductsPage {
         await this.addToCartButtons.first().click();
     }
 
-    // Remove the first added product.
-    async removeFirstProduct() {
-        await this.removeButtons.first().click();
+    // Add a specific product to the cart by its product name.
+    async addProductToCart(productName) {
+        // Find the product card that contains the required product name.
+        const productItem = this.page
+            .locator('[data-test="inventory-item"]')
+            .filter({
+                hasText: productName,
+            });
+
+        // Find the Add to cart button inside this product card.
+        const addButton = productItem.getByRole('button', {
+            name: 'Add to cart',
+        });
+
+        // Click the button for this specific product.
+        await addButton.click();
     }
+
+    // Remove a specific product from the cart by product name.
+    async removeProductFromCart(productName) {
+        // Find the required product card.
+        const productItem = this.getProductItem(productName);
+
+        // Find the Remove button only inside this product card.
+        const removeButton = productItem.getByRole('button', {
+            name: 'Remove',
+        });
+
+        // Remove this specific product.
+        await removeButton.click();
+    }
+
+    // Return the product card for a specific product name.
+    getProductItem(productName) {
+        return this.page
+            .locator('[data-test="inventory-item"]')
+            .filter({
+                hasText: productName,
+            });
+    }
+
+    // // Remove the first added product.
+    // async removeFirstProduct() {
+    //     await this.removeButtons.first().click();
+    // }
 
     // Sort products by price, low to high.
     async sortByPriceLowToHigh() {

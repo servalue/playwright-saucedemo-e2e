@@ -1,4 +1,6 @@
 const { test, expect } = require('../../fixtures/testFixtures');
+// Import reusable product test data.
+const { products } = require('../../test-data/products');
 
 test('products page opens', async ({
     page,
@@ -30,12 +32,18 @@ test('user can add product to cart', async ({
     await page.goto('/inventory.html');
 
     // Add the first product to the cart.
-    await productsPage.addFirstProductToCart();
+    await productsPage.addProductToCart(products.backpack);
 
     // Assert
-    // After adding the product, the button changes to "Remove".
-    await expect(productsPage.removeButtons.first()).toBeVisible();
-    // The cart badge should show "1" because one product was added.
+    // Find the same product that we added.
+    const backpackItem = productsPage.getProductItem(products.backpack);
+
+    // Check that this product now has a Remove button.
+    await expect(
+        backpackItem.getByRole('button', { name: 'Remove' })
+    ).toBeVisible();
+
+    // Check that the cart contains one product.
     await expect(headerComponent.cartBadge).toHaveText('1');
 });
 
@@ -48,13 +56,20 @@ test('user can remove product from products page', async ({
     // Authentication state is already loaded by Playwright.
     await page.goto('/inventory.html');
 
-    await productsPage.addFirstProductToCart();
+    await productsPage.addProductToCart(products.backpack);
     await expect(headerComponent.cartBadge).toHaveText('1');
 
     // Act
-    await productsPage.removeFirstProduct();
+    // Remove the product from the products page.
+    await productsPage.removeProductFromCart(products.backpack);
 
     // Assert
+    const backpackItem = productsPage.getProductItem(products.backpack);
+
+    // Backpack should have Add to cart again.
+    await expect(
+        backpackItem.getByRole('button', { name: 'Add to cart' })
+    ).toBeVisible();
     // After removing the product, icon count should be 0 and the cart badge should not be visible.
     await expect(headerComponent.cartBadge).not.toBeVisible();
 });
