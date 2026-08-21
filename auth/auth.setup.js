@@ -1,6 +1,6 @@
 const { test: setup, expect } = require('@playwright/test');
-const { LoginPage } = require('../../pages/LoginPage');
-const { standardUser } = require('../../test-data/users');
+const { LoginPage } = require('../pages/LoginPage');
+const { standardUser } = require('../test-data/users');
 
 // Setup function to authenticate a standard user before running tests.
 setup('authenticate standard user', async ({ page }) => {
