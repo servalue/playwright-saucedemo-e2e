@@ -5,6 +5,7 @@ const { test: base, expect } = require('@playwright/test');
 const { ProductsPage } = require('../pages/ProductsPage');
 const { CartPage } = require('../pages/CartPage');
 const { HeaderComponent } = require('../components/HeaderComponent');
+const { CheckoutPage } = require('../pages/CheckoutPage');
 
 // Extend the normal Playwright test.
 // We add our own reusable fixtures.
@@ -30,6 +31,12 @@ const test = base.extend({
         const header = new HeaderComponent(page);
 
         await use(header);
+    },
+    // checkoutPage fixture
+    checkoutPage: async ({ page }, use) => {
+        const checkoutPage = new CheckoutPage(page);
+
+        await use(checkoutPage);
     },
 });
 

@@ -12,11 +12,21 @@ class CartPage {
         this.removeButtons = page.getByRole('button', {
             name: 'Remove',
         });
+
+        // Button that opens checkout.
+        this.checkoutButton = page.getByRole('button', {
+            name: 'Checkout',
+        });
     }
 
     // Remove the first product from the cart.
     async removeFirstProduct() {
         await this.removeButtons.first().click();
+    }
+
+    // Open the checkout flow.
+    async openCheckout() {
+        await this.checkoutButton.click();
     }
 }
 
