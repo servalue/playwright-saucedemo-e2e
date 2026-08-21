@@ -3,6 +3,12 @@ const { test, expect } = require('../../fixtures/testFixtures');
 const { products } = require('../../test-data/products');
 const { checkoutData } = require('../../test-data/checkout');
 
+// Run before every test in this file.
+test.beforeEach(async ({ page }) => {
+    // Open the Products page using saved authentication state.
+    await page.goto('/inventory.html');
+});
+
 test('user can complete checkout successfully', async ({
     page,
     productsPage,
@@ -11,21 +17,15 @@ test('user can complete checkout successfully', async ({
     checkoutPage,
 }) => {
     // Arrange
-    // Open the Products page with saved authentication state.
-    await page.goto('/inventory.html');
-    await page.waitForTimeout(3000);
     // Add a specific product.
     await productsPage.addProductToCart(products.backpack);
-    await page.waitForTimeout(3000);
 
     // Open the cart.
     await headerComponent.openCart();
-    await page.waitForTimeout(3000);
     // Confirm that the product is present.
     await expect(cartPage.productNames).toContainText(
         products.backpack
     );
-    await page.waitForTimeout(3000);
     // Open checkout.
     await cartPage.openCheckout();
 
@@ -48,15 +48,12 @@ test('user can complete checkout successfully', async ({
 });
 
 test('checkout requires first name', async ({
-    page,
     productsPage,
     cartPage,
     headerComponent,
     checkoutPage,
 }) => {
     // Arrange
-    await page.goto('/inventory.html');
-
     await productsPage.addProductToCart(products.backpack);
     await headerComponent.openCart();
     await cartPage.openCheckout();
@@ -76,15 +73,12 @@ test('checkout requires first name', async ({
 });
 
 test('checkout total is calculated correctly', async ({
-    page,
     productsPage,
     cartPage,
     headerComponent,
     checkoutPage,
 }) => {
     // Arrange
-    await page.goto('/inventory.html');
-
     await productsPage.addProductToCart(products.backpack);
     await headerComponent.openCart();
     await cartPage.openCheckout();

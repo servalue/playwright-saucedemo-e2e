@@ -2,6 +2,12 @@ const { test, expect } = require('../../fixtures/testFixtures');
 // Import reusable product test data.
 const { products } = require('../../test-data/products');
 
+// Run before every test in this file.
+test.beforeEach(async ({ page }) => {
+    // Open the Products page using saved authentication state.
+    await page.goto('/inventory.html');
+});
+
 test('products page opens', async ({
     page,
     productsPage
@@ -9,8 +15,6 @@ test('products page opens', async ({
     // Arrange
 
     // Act
-    // Authentication state is already loaded by Playwright.
-    await page.goto('/inventory.html');
 
     // Assert
     // Check that the Products title is visible.
@@ -21,16 +25,12 @@ test('products page opens', async ({
 });
 
 test('user can add product to cart', async ({
-    page,
     productsPage,
     headerComponent,
 }) => {
     // Arrange
 
     // Act
-    // Authentication state is already loaded by Playwright.
-    await page.goto('/inventory.html');
-
     // Add the first product to the cart.
     await productsPage.addProductToCart(products.backpack);
 
@@ -48,14 +48,10 @@ test('user can add product to cart', async ({
 });
 
 test('user can remove product from products page', async ({
-    page,
     productsPage,
     headerComponent,
 }) => {
     // Arrange
-    // Authentication state is already loaded by Playwright.
-    await page.goto('/inventory.html');
-
     await productsPage.addProductToCart(products.backpack);
     await expect(headerComponent.cartBadge).toHaveText('1');
 
@@ -75,13 +71,9 @@ test('user can remove product from products page', async ({
 });
 
 test('products can be sorted by price low to high', async ({
-    page,
     productsPage
 }) => {
     // Arrange
-
-    // Authentication state is already loaded by Playwright.
-    await page.goto('/inventory.html');
 
     // Act
     // click the sort dropdown and select "Price (low to high)".

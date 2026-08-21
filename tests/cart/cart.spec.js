@@ -2,17 +2,18 @@ const { test, expect } = require('../../fixtures/testFixtures');
 // Import reusable product test data.
 const { products } = require('../../test-data/products');
 
+// Run before every test in this file.
+test.beforeEach(async ({ page }) => {
+    // Open the Products page using saved authentication state.
+    await page.goto('/inventory.html');
+});
+
 test('product appears in cart', async ({
-    page,
     productsPage,
     cartPage,
     headerComponent
 }) => {
     // Arrange
-
-    // Authentication state is already loaded.
-    await page.goto('/inventory.html');
-
     await productsPage.addProductToCart(products.backpack);
 
     // Act
@@ -26,16 +27,11 @@ test('product appears in cart', async ({
 });
 
 test('user can remove product from cart', async ({
-    page,
     productsPage,
     cartPage,
     headerComponent
 }) => {
     // Arrange
-
-    // Authentication state is already loaded.
-    await page.goto('/inventory.html');
-
     // Add a product to the cart and open the cart page.
     await productsPage.addProductToCart(products.backpack);
     await headerComponent.openCart();
