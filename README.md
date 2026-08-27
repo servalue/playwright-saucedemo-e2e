@@ -8,7 +8,7 @@ Target application:
 https://www.saucedemo.com/
 ```
 
-## Technology Stack
+## 🧰 Technology Stack
 
 * JavaScript
 * Node.js
@@ -24,7 +24,7 @@ Supported browsers:
 
 ---
 
-## Prerequisites
+## ⚙️ Prerequisites
 
 Before running the project, install:
 
@@ -64,7 +64,7 @@ After installation, the project is ready to run.
 
 ---
 
-## Project Structure
+## 🗂️ Project Structure
 
 ```text
 playwright-saucedemo-e2e/
@@ -112,7 +112,7 @@ playwright-saucedemo-e2e/
 
 ---
 
-## Test Coverage
+## ✅ Test Coverage
 
 ### Authentication
 
@@ -177,7 +177,7 @@ tests/checkout/checkout.spec.js
 
 ---
 
-## Test Automation Design Patterns
+## 🧩 Test Automation Design Patterns
 
 ### Page Object Model
 
@@ -345,7 +345,58 @@ await expect(header.cartBadge).toHaveText('1');
 
 ---
 
-## Running Tests
+## 🏷️ Test Suites
+
+Tests are separated into two execution groups using Playwright tags:
+
+```text
+@smoke
+@regression
+```
+
+`@smoke` is used for critical checks.
+
+`@regression` is used for wider regression coverage.
+
+### Run Smoke suite
+
+```bash
+npx playwright test -g @smoke
+```
+
+### Run Regression suite
+
+```bash
+npx playwright test -g @regression
+```
+
+### Run Smoke suite in Chromium
+
+```bash
+npx playwright test -g @smoke --project=chromium
+```
+
+### Run Regression suite in Firefox
+
+```bash
+npx playwright test -g @regression --project=firefox
+```
+
+### Run Smoke suite in headed mode
+
+```bash
+npx playwright test -g @smoke --project=chromium --headed
+```
+
+### Run all tagged functional tests
+
+```bash
+npx playwright test --grep "@smoke|@regression"
+```
+
+---
+
+## ▶️ Running Tests
 
 ### Run all tests
 
@@ -355,15 +406,11 @@ Run the complete test suite with all configured projects:
 npx playwright test
 ```
 
----
-
 ### Run one test file
 
 ```bash
 npx playwright test tests/products/products.spec.js
 ```
-
----
 
 ### Run one test area
 
@@ -391,8 +438,6 @@ Checkout:
 npx playwright test tests/checkout
 ```
 
----
-
 ### Run one specific test
 
 Use `-g` with the test name:
@@ -403,7 +448,7 @@ npx playwright test tests/products/products.spec.js -g "user can add product to 
 
 ---
 
-## Browser Execution
+## 🌐 Browser Execution
 
 ### Run tests in Chromium
 
@@ -433,7 +478,7 @@ npx playwright test tests/products/products.spec.js \
 
 ---
 
-## Headed Mode
+## 👀 Headed Mode
 
 By default, Playwright runs browsers in headless mode.
 
@@ -454,7 +499,7 @@ npx playwright test tests/products/products.spec.js \
 
 ---
 
-## Debugging
+## 🐞 Debugging
 
 ### Debug all tests
 
@@ -498,7 +543,7 @@ The HTML report contains:
 
 ---
 
-## Failure Artifacts
+## 📦 Failure Artifacts
 
 The Playwright configuration keeps useful artifacts for failed tests:
 
@@ -508,4 +553,4 @@ The Playwright configuration keeps useful artifacts for failed tests:
 * error stack
 * HTML report
 
-Generated test artifacts are excluded from the repository.
+`Generated test artifacts are excluded from the repository.`

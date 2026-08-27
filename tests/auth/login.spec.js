@@ -7,122 +7,154 @@ const {
 } = require('../../test-data/users');
 
 // "SauceDemo page opens" is the test name.
-test('SauceDemo page opens', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('SauceDemo page opens',
+    {
+        tag: '@smoke',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // expect() creates an assertion.
-    // An assertion checks the actual result against the expected result.
-    // Here we expect the browser page title to be "Swag Labs".
-    await expect(page).toHaveTitle('Swag Labs');
-});
+        // expect() creates an assertion.
+        // An assertion checks the actual result against the expected result.
+        // Here we expect the browser page title to be "Swag Labs".
+        await expect(page).toHaveTitle('Swag Labs');
+    });
 
-test('login page elements are visible', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('login page elements are visible',
+    {
+        tag: '@smoke',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // Find the username field by its placeholder text.
-    const usernameInput = page.getByPlaceholder('Username');
+        // Find the username field by its placeholder text.
+        const usernameInput = page.getByPlaceholder('Username');
 
-    // Find the password field by its placeholder text.
-    const passwordInput = page.getByPlaceholder('Password');
+        // Find the password field by its placeholder text.
+        const passwordInput = page.getByPlaceholder('Password');
 
-    // Find the Login button by its role and visible name.
-    const loginButton = page.getByRole('button', { name: 'Login' });
+        // Find the Login button by its role and visible name.
+        const loginButton = page.getByRole('button', { name: 'Login' });
 
-    // Check that all three elements are visible.
-    await expect(usernameInput).toBeVisible();
-    await expect(passwordInput).toBeVisible();
-    await expect(loginButton).toBeVisible();
-});
+        // Check that all three elements are visible.
+        await expect(usernameInput).toBeVisible();
+        await expect(passwordInput).toBeVisible();
+        await expect(loginButton).toBeVisible();
+    });
 
-test('standard user can login', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('standard user can login',
+    {
+        tag: '@smoke',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // Act
-    // Enter valid credentials.
-    await loginPage.login(
-        standardUser.username,
-        standardUser.password
-    );
+        // Act
+        // Enter valid credentials.
+        await loginPage.login(
+            standardUser.username,
+            standardUser.password
+        );
 
-    // Assert
-    // After successful login, SauceDemo should open the inventory page.
-    await expect(page).toHaveURL(/inventory.html/);
-});
+        // Assert
+        // After successful login, SauceDemo should open the inventory page.
+        await expect(page).toHaveURL(/inventory.html/);
+    });
 
-test('invalid username cannot login', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('invalid username cannot login',
+    {
+        tag: '@regression',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // Act
-    await loginPage.login(
-        invalidUser.username,
-        standardUser.password
-    );
-    // Assert
-    await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
-});
+        // Act
+        await loginPage.login(
+            invalidUser.username,
+            standardUser.password
+        );
+        // Assert
+        await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
+    });
 
-test('invalid password cannot login', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('invalid password cannot login',
+    {
+        tag: '@regression',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // Act
-    await loginPage.login(
-        standardUser.username,
-        invalidUser.password
-    );
-    // Assert
-    await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
-});
+        // Act
+        await loginPage.login(
+            standardUser.username,
+            invalidUser.password
+        );
+        // Assert
+        await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
+    });
 
-test('locked user cannot login', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('locked user cannot login',
+    {
+        tag: '@regression',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // Act
-    await loginPage.login(
-        lockedUser.username,
-        lockedUser.password
-    );
-    // Assert
-    await expect(loginPage.errorMessage).toHaveText('Epic sadface: Sorry, this user has been locked out.');
-});
+        // Act
+        await loginPage.login(
+            lockedUser.username,
+            lockedUser.password
+        );
+        // Assert
+        await expect(loginPage.errorMessage).toHaveText('Epic sadface: Sorry, this user has been locked out.');
+    });
 
-test('empty username cannot login', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('empty username cannot login',
+    {
+        tag: '@regression',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // Act
-    await loginPage.login(
-        '',
-        standardUser.password
-    );
+        // Act
+        await loginPage.login(
+            '',
+            standardUser.password
+        );
 
-    // Assert
-    await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username is required');
-});
+        // Assert
+        await expect(loginPage.errorMessage).toHaveText('Epic sadface: Username is required');
+    });
 
-test('empty password cannot login', async ({ page }) => {
-    // Arrange
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
+test('empty password cannot login',
+    {
+        tag: '@regression',
+    },
+    async ({ page }) => {
+        // Arrange
+        const loginPage = new LoginPage(page);
+        await loginPage.open();
 
-    // Act
-    await loginPage.login(
-        standardUser.username,
-        ''
-    );
+        // Act
+        await loginPage.login(
+            standardUser.username,
+            ''
+        );
 
-    // Assert
-    await expect(loginPage.errorMessage).toHaveText('Epic sadface: Password is required');
-});
+        // Assert
+        await expect(loginPage.errorMessage).toHaveText('Epic sadface: Password is required');
+    });
